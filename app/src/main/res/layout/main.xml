@@ -1,131 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/linearLayout"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light" />
+  <Button
+    android:id="@+id/btn_open_bt"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="8dp"
+    android:text="@string/btn_open"
+    app:layout_constraintEnd_toStartOf="@+id/guideline3"
+    app:layout_constraintHorizontal_bias="0.5"
+    app:layout_constraintStart_toStartOf="@+id/guideline2"
+    app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/mensajeBienvenida"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+  <Button
+    android:id="@+id/btn_save"
+    android:layout_width="0dp"
+    android:layout_height="48dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="8dp"
+    android:text="@string/Save"
+    app:layout_constraintEnd_toStartOf="@+id/guideline3"
+    app:layout_constraintStart_toStartOf="@+id/guideline2"
+    app:layout_constraintTop_toBottomOf="@+id/btn_open_bt" />
 
 
-    <RadioButton
-        android:id="@+id/radioIn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="true"
-        android:text="@string/In"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@+id/tvTitle"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+  <ImageView
+    android:id="@+id/imageFinger"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp"
+    android:scaleType="fitCenter"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/progressBar1"
+    app:srcCompat="@drawable/ic_picture" />
 
-    <RadioButton
-        android:id="@+id/radioOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Out"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+  <ProgressBar
+    android:id="@+id/progressBar1"
+    style="?android:attr/progressBarStyleHorizontal"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/tvMessage"></ProgressBar>
 
-    <Button
-        android:id="@+id/btn_open_bt"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/btn_open"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+  <RadioButton
+    android:id="@+id/radioIn"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:checked="true"
+    android:text="@string/In"
+    android:visibility="gone"
+    app:layout_constraintStart_toStartOf="@+id/tvTitle"
+    app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/Save"
-        app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/btn_open_bt" />
+  <RadioButton
+    android:id="@+id/radioOut"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/Out"
+    android:visibility="gone"
+    app:layout_constraintBottom_toTopOf="parent"
+    app:layout_constraintEnd_toStartOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvMessage"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/Message"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_save" />
+  <TextView
+    android:id="@+id/tvTitle"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:text="@string/mensajeBienvenida"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <ProgressBar
-        android:id="@+id/progressBar1"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvMessage"></ProgressBar>
+  <TextView
+    android:id="@+id/tvMessage"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:text="@string/Message"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/btn_save" />
 
-    <ImageView
-        android:id="@+id/imageFinger"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar1"
-        app:srcCompat="@drawable/ic_picture" />
+  <androidx.appcompat.widget.Toolbar
+    android:id="@+id/toolbar"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:minHeight="?attr/actionBarSize"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.15" />
+  <androidx.constraintlayout.widget.Guideline
+    android:id="@+id/guideline2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintGuide_percent="0.15" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.85" />
+  <androidx.constraintlayout.widget.Guideline
+    android:id="@+id/guideline3"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintGuide_percent="0.85" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
