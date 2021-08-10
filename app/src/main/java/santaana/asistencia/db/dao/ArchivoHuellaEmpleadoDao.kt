@@ -12,6 +12,8 @@ abstract class ArchivoHuellaEmpleadoDao {
   @Delete
   abstract fun delete(huella: ArchivoHuellaEmpleado)
 
+/*
   @Query("UPDATE archivo_huella_empleado SET estadoSincronizacion = ")
   abstract fun cambiaEstadoSincronizacion()
+*/
 }

@@ -4,7 +4,7 @@ import santaana.asistencia.db.dao.ArchivoHuellaEmpleadoDao
 
 class Repo(val huellaDao: ArchivoHuellaEmpleadoDao) {
 
-  suspend fun agregarHuella(empleado:Int, foto:BitMap){
+    suspend fun agregarHuella(path: String, empleado: Int, foto: ByteArray) {
 
-  }
+    }
 }
