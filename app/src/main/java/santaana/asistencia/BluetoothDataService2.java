@@ -17,17 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
-import static santaana.asistencia.ConstantsKt.DEVICE_NAME;
-import static santaana.asistencia.ConstantsKt.MESSAGE_DATA_ERROR;
-import static santaana.asistencia.ConstantsKt.MESSAGE_DATA_RECEIVING;
-import static santaana.asistencia.ConstantsKt.MESSAGE_DEVICE_NAME;
-import static santaana.asistencia.ConstantsKt.MESSAGE_SHOW_MSG;
-import static santaana.asistencia.ConstantsKt.MESSAGE_STATE_CHANGE;
-import static santaana.asistencia.ConstantsKt.MESSAGE_TOAST;
-import static santaana.asistencia.ConstantsKt.TOAST;
-import static santaana.asistencia.ConstantsKt.mStop;
-
-public class BluetoothDataService {
+public class BluetoothDataService2 {
 
   // Debugging
   private static final String TAG = "BluetoothDataService";
@@ -99,7 +89,7 @@ public class BluetoothDataService {
    *
    * @param handler A Handler to send messages back to the UI Activity
    */
-  public BluetoothDataService(Handler handler) {
+  public BluetoothDataService2(Handler handler) {
     mAdapter = BluetoothAdapter.getDefaultAdapter();
     mState = STATE_NONE;
     mHandler = handler;
@@ -115,7 +105,7 @@ public class BluetoothDataService {
     mState = state;
 
     // Give the new state to the Handler so the UI Activity can update
-    mHandler.obtainMessage(MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
+    mHandler.obtainMessage(FS28DemoActivity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
   }
 
   /**
@@ -212,9 +202,9 @@ public class BluetoothDataService {
     mConnectedThread.start();
 
     // Send the name of the connected device back to the UI Activity
-    Message msg = mHandler.obtainMessage(MESSAGE_DEVICE_NAME);
+    Message msg = mHandler.obtainMessage(FS28DemoActivity.MESSAGE_DEVICE_NAME);
     Bundle bundle = new Bundle();
-    bundle.putString(DEVICE_NAME, device.getName());
+    bundle.putString(FS28DemoActivity.DEVICE_NAME, device.getName());
     msg.setData(bundle);
     mHandler.sendMessage(msg);
 
@@ -266,9 +256,9 @@ public class BluetoothDataService {
     setState(STATE_LISTEN);
 
     // Send a failure message back to the Activity
-    Message msg = mHandler.obtainMessage(MESSAGE_TOAST);
+    Message msg = mHandler.obtainMessage(FS28DemoActivity.MESSAGE_TOAST);
     Bundle bundle = new Bundle();
-    bundle.putString(TOAST, "No se puede conectar con el lector.");
+    bundle.putString(FS28DemoActivity.TOAST, "No se puede conectar con el lector.");
     msg.setData(bundle);
     mHandler.sendMessage(msg);
   }
@@ -280,9 +270,9 @@ public class BluetoothDataService {
     setState(STATE_LISTEN);
 
     // Send a failure message back to the Activity
-    Message msg = mHandler.obtainMessage(MESSAGE_TOAST);
+    Message msg = mHandler.obtainMessage(FS28DemoActivity.MESSAGE_TOAST);
     Bundle bundle = new Bundle();
-    bundle.putString(TOAST, "Se ha desconectado del lector.");
+    bundle.putString(FS28DemoActivity.TOAST, "Se ha desconectado del lector.");
     msg.setData(bundle);
     mHandler.sendMessage(msg);
   }
@@ -343,7 +333,7 @@ public class BluetoothDataService {
         e.printStackTrace();
       }
       // send message to stop the connected thread and reconnect.
-      mHandler.obtainMessage(MESSAGE_DATA_ERROR, ERROR_TIMEOUT, -1).sendToTarget();
+      mHandler.obtainMessage(FS28DemoActivity.MESSAGE_DATA_ERROR, ERROR_TIMEOUT, -1).sendToTarget();
     }
   };
 
@@ -387,7 +377,7 @@ public class BluetoothDataService {
 
       // Listen to the server socket if we're not connected
       while (mState != STATE_CONNECTED) {
-        if (mStop)
+        if (FS28DemoActivity.mStop)
           break;
         try {
           // This is a blocking call and will only return on a
@@ -400,7 +390,7 @@ public class BluetoothDataService {
 
         // If a connection was accepted
         if (socket != null) {
-          synchronized (BluetoothDataService.this) {
+          synchronized (BluetoothDataService2.this) {
             switch (mState) {
               case STATE_LISTEN:
               case STATE_CONNECTING:
@@ -449,13 +439,13 @@ public class BluetoothDataService {
 
       // Get a BluetoothSocket for a connection with the
       // given BluetoothDevice
-            /*
-            try {
-                tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
-            } catch (IOException e) {
-                Log.e(TAG, "create() failed", e);
-            }
-            */
+      /*
+      try {
+          tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
+      } catch (IOException e) {
+          Log.e(TAG, "create() failed", e);
+      }
+      */
       Method m = null;
       try {
         m = device.getClass().getMethod("createRfcommSocket", new Class[]{int.class});
@@ -509,7 +499,7 @@ public class BluetoothDataService {
       }
 
       // Reset the ConnectThread because we're done
-      synchronized (BluetoothDataService.this) {
+      synchronized (BluetoothDataService2.this) {
         mConnectThread = null;
       }
 
@@ -552,7 +542,7 @@ public class BluetoothDataService {
       mmInStream = tmpIn;
       mmOutStream = tmpOut;
       mState = STATE_CONNECTED;
-      ConstantsKt.mConnected = true;
+      FS28DemoActivity.mConnected = true;
     }
 
     @Override
@@ -572,7 +562,7 @@ public class BluetoothDataService {
             error = true;
             break;
           }
-          if (ConstantsKt.mStop || (mState != STATE_CONNECTED))
+          if (FS28DemoActivity.mStop || (mState != STATE_CONNECTED))
             break;
           try {
             if (mCommandLength < 13)//receive 13 bytes command first
@@ -589,8 +579,8 @@ public class BluetoothDataService {
           if (mbytesRead > 0) {
             if (mbFirstGet) {
               //lT1 = SystemClock.uptimeMillis();
-              mHandler.obtainMessage(MESSAGE_SHOW_MSG, -1, -1, "Recibiendo registro...").sendToTarget();
-              mHandler.obtainMessage(MESSAGE_DATA_RECEIVING).sendToTarget();
+              mHandler.obtainMessage(FS28DemoActivity.MESSAGE_SHOW_MSG, -1, -1, "Recibiendo registro...").sendToTarget();
+              mHandler.obtainMessage(FS28DemoActivity.MESSAGE_DATA_RECEIVING).sendToTarget();
               mbFirstGet = false;
             }
             //1. get and check 13 bytes command
@@ -782,8 +772,8 @@ public class BluetoothDataService {
         mmOutStream.write(buffer);
         mmOutStream.flush();
         // Share the sent message back to the UI Activity
-                /*mHandler.obtainMessage(FS28DemoActivity.MESSAGE_WRITE, -1, -1, buffer)
-                        .sendToTarget();*/
+        /*mHandler.obtainMessage(FS28DemoActivity.MESSAGE_WRITE, -1, -1, buffer)
+                .sendToTarget();*/
       } catch (IOException e) {
         Log.e(TAG, "Exception during write", e);
       }

@@ -260,31 +260,6 @@ class FS28DemoActivity : AppCompatActivity(), KoinComponent {
         }
     }
 
-    fun conectarConLector() {
-        if (mStop) {
-            if (!mIn) {
-                startDeviceListActivity()
-            } else {
-                mStop = false
-                setupCommunication()
-                //    mButtonOpen.setText("Desconectar");
-                mRadioIn?.isEnabled = false
-                mRadioOut?.isEnabled = false
-            }
-        }
-    }
-
-    fun desconectarLector() {
-        mStop = true
-        if (mBTService != null) {
-            mBTService?.stop()
-            mBTService = null
-        }
-        //            mButtonOpen.setText("Conectar con Lector");
-        mRadioIn?.isEnabled = true
-        mRadioOut?.isEnabled = true
-    }
-
     fun startDeviceListActivity() {
         val serverIntent = Intent(this, DeviceListActivity::class.java)
         startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE)
@@ -430,6 +405,7 @@ class FS28DemoActivity : AppCompatActivity(), KoinComponent {
     private val mHandler: Handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
+
                 MESSAGE_STATE_CHANGE -> when (msg.arg1) {
                     BluetoothDataService.STATE_CONNECTED -> {
                         mMessage!!.text = "Conectado al lector: "

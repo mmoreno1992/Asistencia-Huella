@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+  <item
+    android:id="@+id/action_guardar_huella"
+    android:icon="@android:drawable/ic_menu_save"
+    android:title="@string/guardar_huella"
+    app:showAsAction="always" />
+  <item
+    android:id="@+id/action_conecta_lector"
+    android:title="@string/conectar_con_lector"
+    app:showAsAction="never" />
+</menu>
