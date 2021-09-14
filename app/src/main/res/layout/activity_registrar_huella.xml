@@ -7,68 +7,44 @@
   android:layout_height="match_parent"
   tools:context=".registrar.RegistrarHuellaActivity">
 
-  <Button
-    android:id="@+id/btn_open_bt"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="16dp"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="8dp"
-    android:text="@string/btn_open"
-    app:layout_constraintEnd_toStartOf="@+id/guideline3"
-    app:layout_constraintHorizontal_bias="0.5"
-    app:layout_constraintStart_toStartOf="@+id/guideline2"
-    app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
-  <Button
-    android:id="@+id/btn_save"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="16dp"
-    android:enabled="true"
-    android:text="@string/Save"
-    app:layout_constraintEnd_toStartOf="@+id/guideline3"
-    app:layout_constraintStart_toStartOf="@+id/guideline2"
-    app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
-
 
   <ImageView
-    android:id="@+id/imageFinger"
-    android:layout_width="0dp"
-    android:layout_height="0dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginStart="8dp"
-    android:scaleType="fitCenter"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/progressBar"
-    app:srcCompat="@drawable/ic_picture" />
+      android:id="@+id/imageFinger"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:layout_marginStart="32dp"
+      android:layout_marginTop="32dp"
+      android:layout_marginEnd="32dp"
+      android:layout_marginBottom="32dp"
+      android:scaleType="fitCenter"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/progressBar"
+      app:srcCompat="@drawable/ic_picture" />
 
   <ProgressBar
-    android:id="@+id/progressBar"
-    style="?android:attr/progressBarStyleHorizontal"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="9dp"
-    android:layout_marginEnd="8dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/tvMessage"></ProgressBar>
+      android:id="@+id/progressBar"
+      style="?android:attr/progressBarStyleHorizontal"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="8dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/tvMessage" />
 
   <TextView
-    android:id="@+id/tvMessage"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="8dp"
-    android:layout_marginStart="8dp"
-    android:text="@string/Message"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/btn_save" />
+      android:id="@+id/tvMessage"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="4dp"
+      android:text="@string/Message"
+      app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
+      app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
   <androidx.appcompat.widget.Toolbar
     android:id="@+id/toolbar"
@@ -97,22 +73,32 @@
     app:layout_constraintGuide_percent="0.85" />
 
   <com.google.android.material.textfield.TextInputLayout
-    android:id="@+id/textInputLayout2"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="16dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/btn_open_bt">
+      android:id="@+id/textInputLayout2"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="8dp"
+      android:layout_marginEnd="16dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
     <com.google.android.material.textfield.TextInputEditText
-      android:id="@+id/codigoEmpleado"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:hint="Codigo Colaborador"
-      android:inputType="number" />
+        android:id="@+id/codigoEmpleado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/codigo_colaborador"
+        android:inputType="number" />
   </com.google.android.material.textfield.TextInputLayout>
+
+  <TextView
+      android:id="@+id/textView5"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="4dp"
+      android:text="@string/imagen_huella"
+      app:layout_constraintBottom_toTopOf="@+id/imageFinger"
+      app:layout_constraintEnd_toEndOf="@+id/imageFinger"
+      app:layout_constraintStart_toStartOf="@+id/imageFinger" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

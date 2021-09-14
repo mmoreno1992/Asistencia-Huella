@@ -181,7 +181,7 @@ class FS28DemoActivity : AppCompatActivity(), KoinComponent {
                 val score = FingerprintMatcher(probe)
                     .match(candidate)
                 if (score >= 40) {
-                    repository.registraAsistenciaNueva(codigo)
+                    //repository.registraAsistenciaNueva(codigo)
                 }
                 CoroutineScope(Dispatchers.Main).launch {
                     if (score >= 40) {
@@ -236,7 +236,7 @@ class FS28DemoActivity : AppCompatActivity(), KoinComponent {
                         .match(candidate)
                     if (score >= 40) {
                         huellaEncontrada = true
-                        repository.registraAsistenciaNueva(it.name.split("_")[0].toInt())
+                        //repository.registraAsistenciaNueva(it.name.split("_")[0].toInt())
                         CoroutineScope(Dispatchers.Main).launch {
                             mMessage?.text =
                                 "Archivo ${it.name} COINCIDE con la huella de it.name.split(\"_\")[0]"

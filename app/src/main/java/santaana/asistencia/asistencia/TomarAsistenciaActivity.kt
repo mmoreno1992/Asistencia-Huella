@@ -1,27 +1,43 @@
-package santaana.asistencia.registrar
+package santaana.asistencia.asistencia
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.graphics.*
 import android.os.*
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
+import android.view.View
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
+import com.machinezoo.sourceafis.FingerprintImage
+import com.machinezoo.sourceafis.FingerprintImageOptions
+import com.machinezoo.sourceafis.FingerprintMatcher
+import com.machinezoo.sourceafis.FingerprintTemplate
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
+import org.koin.core.component.inject
 import org.threeten.bp.LocalDate
 import pub.devrel.easypermissions.EasyPermissions
 import santaana.asistencia.*
 import santaana.asistencia.databinding.ActivityRegistrarHuellaBinding
+import santaana.asistencia.databinding.ActivityTomarAsistenciaBinding
+import santaana.asistencia.db.TipoAsistencia
+import santaana.asistencia.guardadas.AsistenciaGuardadaActivity
+import santaana.asistencia.guardadas.AsistenciaRepository
+import santaana.asistencia.registrar.RegistrarHuellaBluetoothDataService
 import java.io.File
 import java.io.FileOutputStream
-import java.util.*
 
-class RegistrarHuellaActivity : AppCompatActivity() {
-
-
+class TomarAsistenciaActivity : AppCompatActivity() {
     var mIn = true
     private var mBitmapFP: Bitmap? = null
     private var mMessage: TextView? = null
@@ -29,20 +45,20 @@ class RegistrarHuellaActivity : AppCompatActivity() {
     private var mProgressbar1: ProgressBar? = null
     private var mConnectedDeviceName: String? = null
     private lateinit var codigoEmpleado: TextInputEditText
-    private var isDefaultDrawableSet = true
 
-    lateinit var binding: ActivityRegistrarHuellaBinding
+    lateinit var binding: ActivityTomarAsistenciaBinding
 
     var itemConectarConLector: MenuItem? = null
     var itemGuardarHuella: MenuItem? = null
 
     // Local Bluetooth adapter
     private var mBluetoothAdapter: BluetoothAdapter? = null
-    private var mBTService: RegistrarHuellaBluetoothDataService? = null
+    private var mBTService: TomarAsistenciaBluetoothDataService? = null
+    val repository: AsistenciaRepository by inject()
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityRegistrarHuellaBinding.inflate(layoutInflater)
+        binding = ActivityTomarAsistenciaBinding.inflate(layoutInflater)
         // Get local Bluetooth adapter
         setContentView(binding.root)
 
@@ -61,11 +77,160 @@ class RegistrarHuellaActivity : AppCompatActivity() {
         mProgressbar1?.max = 100
         codigoEmpleado = findViewById(R.id.codigoEmpleado)
         setSupportActionBar(binding.toolbar)
+        setListeners()
         conectarConLector()
     }
 
+    private fun setListeners() {
+        binding.botonTomarAsistencia.setOnClickListener {
+            if (connected) {
+                binding.botonTomarAsistencia.isEnabled = false
+                muestraProgressBar(true)
+                mMessage?.text = "Comparando Imagenes..."
+                if (codigoEmpleado.text.toString().isEmpty()) {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        compararImagenes()
+                    }
+                } else {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        compararImagenesPorCodigo(codigoEmpleado.text.toString().toInt())
+                    }
+                }
+            } else {
+                Toast.makeText(
+                    this,
+                    "Conecte antes el lector, para recibir la huella",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    fun muestraProgressBar(muestra: Boolean) {
+        if (muestra)
+            binding.progressBar2.visibility = View.VISIBLE
+        else
+            binding.progressBar2.visibility = View.INVISIBLE
+    }
+
+    private suspend fun compararImagenesPorCodigo(codigo: Int) {
+        var huellaEncontrada = false
+
+        val fileBMP = MyBitmapFile(320, 480, TomarAsistenciaActivity.mImageFP)
+        val candidate = FingerprintTemplate(
+            FingerprintImage(
+                fileBMP.toBytes(),
+                FingerprintImageOptions()
+                    .dpi(500.0)
+            )
+        )
+        getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.listFiles { _, name ->
+            name.contains(
+                codigo.toString()
+            )
+        }?.forEach {
+
+            if (!huellaEncontrada) {
+                val probe = FingerprintTemplate(
+                    FingerprintImage(
+                        it.readBytes(),
+                        FingerprintImageOptions()
+                            .dpi(500.0)
+                    )
+                )
+
+                val score = FingerprintMatcher(probe)
+                    .match(candidate)
+                if (score >= 40) {
+                    repository.registraAsistenciaNueva(codigo, getTipoAsistencia())
+                    huellaEncontrada = true
+                }
+                CoroutineScope(Dispatchers.Main).launch {
+                    if (score >= 40) {
+                        mMessage?.text = "Se registró la asistencia del colaborador $codigo"
+                    }
+                }
+            } else {
+                return@forEach
+            }
+
+        }
+        CoroutineScope(Dispatchers.Main).launch {
+            binding.botonTomarAsistencia.isEnabled = true
+            if (!huellaEncontrada) {
+                mMessage?.text = "No se encontró una huella que coincidiera"
+                muestraProgressBar(false)
+            }
+        }
+
+    }
+
+    private fun getTipoAsistencia() =
+        if (binding.rbEntrada.isChecked)
+            TipoAsistencia.ENTRADA
+        else
+            TipoAsistencia.SALIDA
+
+
+    private suspend fun compararImagenes() {
+        var huellaEncontrada = false
+
+
+        val fileBMP = MyBitmapFile(320, 480, TomarAsistenciaActivity.mImageFP)
+
+        val candidate = FingerprintTemplate(
+            FingerprintImage(
+                fileBMP.toBytes(),
+                FingerprintImageOptions()
+                    .dpi(500.0)
+            )
+        )
+        getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.listFiles()?.forEach {
+            if (!huellaEncontrada) {
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    mMessage?.text = "Revisando el archivo ${it.name}"
+                }
+                val probe = FingerprintTemplate(
+                    FingerprintImage(
+                        it.readBytes(),
+                        FingerprintImageOptions()
+                            .dpi(500.0)
+                    )
+                )
+
+                val score = FingerprintMatcher(probe)
+                    .match(candidate)
+                if (score >= 40) {
+                    huellaEncontrada = true
+                    repository.registraAsistenciaNueva(
+                        it.name.split("_")[0].toInt(),
+                        getTipoAsistencia()
+                    )
+                    CoroutineScope(Dispatchers.Main).launch {
+                        mMessage?.text =
+                            "Se registró asistencia para el colaborador ${it.name.split("_")[0]} "//Archivo ${it.name} COINCIDE con la huella de it.name.split(\"_\")[0]"
+                    }
+                }
+            } else {
+                return@forEach
+            }
+            if (!huellaEncontrada) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    mMessage?.text =
+                        "No se encontró una huella que coincidiera, no se registró asistencia. "
+                }
+            }
+        }
+        CoroutineScope(Dispatchers.Main).launch {
+            binding.botonTomarAsistencia.isEnabled = true
+            muestraProgressBar(false)
+        }
+
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_registrar_huella, menu)
+        menuInflater.inflate(R.menu.menu_tomar_asistencia, menu)
         return true
     }
 
@@ -88,21 +253,8 @@ class RegistrarHuellaActivity : AppCompatActivity() {
             conectarConLector()
             true
         }
-        R.id.action_guardar_huella -> {
-            if (codigoEmpleado.text.isNullOrBlank()) {
-                Toast.makeText(
-                    this,
-                    "Ingrese el codigo del colaborador al que corresponde la imagen.",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-            } else {
-                if (!isDefaultDrawableSet)
-                    saveImage()
-                else
-                    Toast.makeText(this, "Envíe una imagen para guardarse.", Toast.LENGTH_SHORT)
-                        .show()
-            }
+        R.id.action_asistencia_tomada -> {
+            startActivity(Intent(this, AsistenciaGuardadaActivity::class.java))
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -125,7 +277,7 @@ class RegistrarHuellaActivity : AppCompatActivity() {
                 mBTService?.start()
             }
         } else {
-            mBTService = RegistrarHuellaBluetoothDataService(bluetoothHandler)
+            mBTService = TomarAsistenciaBluetoothDataService(bluetoothHandler)
             mBTService?.start()
         }
         mMessage?.text = getString(R.string.esperando_conexiones_lector)
@@ -154,9 +306,7 @@ class RegistrarHuellaActivity : AppCompatActivity() {
             val fileFormat = ".bmp"
             val date = LocalDate.now()
             val fileName =
-                "$dir/${codigoEmpleado.text.toString()}_${
-                    date.dayOfMonth.toString().padStart(2, '0')
-                }${date.monthValue.toString().padStart(2, '0')}${date.year}"
+                "$dir/${codigoEmpleado.text.toString()}_${date.dayOfMonth}${date.monthValue}${date.year}"
             saveImageByFileFormat(fileFormat, fileName)
         } else {
             // Do not have permissions, request them now
@@ -175,24 +325,11 @@ class RegistrarHuellaActivity : AppCompatActivity() {
                 val fileBMP = MyBitmapFile(320, 480, mImageFP)
                 out.write(fileBMP.toBytes())
                 out.close()
-                Toast.makeText(this, "Huella registrada correctamente.", Toast.LENGTH_SHORT).show()
                 mMessage?.text = "Imagen guardada como: $fileName"
-                val handler = Handler(Looper.getMainLooper())
-                handler.postDelayed({
-                    mMessage?.text = ""
-                    codigoEmpleado.setText("")
-                    setDefaultDrawable()
-                }, 1500)
-
             } catch (e: Exception) {
                 mMessage?.text = "Exception in saving file" + e.message
             }
         }
-    }
-
-    private fun setDefaultDrawable() {
-        mFingerImage?.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_picture))
-        isDefaultDrawableSet = true
     }
 
     // The Handler that gets information back from the BluetoothChatService
@@ -234,7 +371,9 @@ class RegistrarHuellaActivity : AppCompatActivity() {
                     mProgressbar1!!.progress = 0
                     if (mReceivedDataType == BluetoothDataService.DATA_TYPE_WSQIMAGE
                         || mReceivedDataType == BluetoothDataService.DATA_TYPE_RAWIMAGE
-                    ) showBitmap() else setDefaultDrawable()
+                    ) showBitmap() else mFingerImage!!.setImageBitmap(
+                        null
+                    )
                     itemGuardarHuella?.isEnabled = true
                     //mButtonSave!!.isEnabled = true
                     invalidateOptionsMenu()
@@ -312,7 +451,6 @@ class RegistrarHuellaActivity : AppCompatActivity() {
         paint.colorFilter = f
         c.drawBitmap(emptyBmp, 0f, 0f, paint)
         mFingerImage!!.setImageBitmap(mBitmapFP)
-        isDefaultDrawableSet = false
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -339,7 +477,7 @@ class RegistrarHuellaActivity : AppCompatActivity() {
                     mBTService!!.connect(device)
                 } else {
                     Toast.makeText(
-                        this@RegistrarHuellaActivity,
+                        this@TomarAsistenciaActivity,
                         "No se pudo conectar ",
                         Toast.LENGTH_SHORT
                     )

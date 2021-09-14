@@ -15,4 +15,10 @@ abstract class AsistenciaEmpleadoDao {
     @Query("Select * From AsistenciaEmpleado")
     abstract fun getAsistenciasEmpleados(): LiveData<List<AsistenciaEmpleado>>
 
+    @Query("Select * From AsistenciaEmpleado Where enviado = 'N'")
+    abstract suspend fun getRegistrosNoEnviados(): List<AsistenciaEmpleado>
+
+    @Query("Update AsistenciaEmpleado Set enviado = 'S' Where id = :idRegistro")
+    abstract suspend fun marcaRegistroComoEnviado(idRegistro: Long)
+
 }

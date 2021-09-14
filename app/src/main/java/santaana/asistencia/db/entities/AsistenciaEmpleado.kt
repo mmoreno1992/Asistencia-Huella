@@ -4,12 +4,14 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
+import santaana.asistencia.db.TipoAsistencia
 
 @Entity
 class AsistenciaEmpleado(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
-    val codigoEmpleado:Int,
-    val fecha: LocalDateTime
-) {
-}
+    val codigoEmpleado: Int,
+    val fecha: LocalDateTime,
+    val entradaSalida: TipoAsistencia,
+    var enviado: String = "N"
+)

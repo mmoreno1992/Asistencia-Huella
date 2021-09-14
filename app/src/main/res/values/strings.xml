@@ -1,46 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <!--  FS28DemoActivity -->
-  <string name="mensajeBienvenida">V.1.0</string>
-  <string name="app_name">Asistencia </string>
-  <!--  DeviceListActivity -->
-  <string name="scanning">Escaneando dispositivos &#8230;</string>
-  <string name="select_device">Select a device to connect</string>
-  <string name="none_paired">No devices have been paired</string>
-  <string name="none_found">No devices found</string>
-  <string name="title_paired_devices">Paired Devices</string>
-  <string name="title_other_devices">Other Available Devices</string>
-  <string name="button_scan">Scan for devices</string>
-  <string name="In">In</string>
-  <string name="Out">Out</string>
-  <string name="btn_open">Conectar con Lector</string>
-  <string name="Save">Registrar Nuevo Colaborador</string>
-  <string name="Message"></string>
-  <string name="ImageDes"></string>
-  <string name="textView1">Please select the file format to save.</string>
-  <string name="radioBitmap">Bitmap</string>
-  <string name="radioWSQ">WSQ</string>
-  <string name="radioSample">Futronic Sample</string>
-  <string name="radioANSI">ANSI Sample</string>
-  <string name="radioISO">ISO Sample</string>
-  <string name="textView2">File name: </string>
-  <string name="buttonOK">OK</string>
-  <!-- TODO: Remove or change this placeholder text -->
-  <string name="hello_blank_fragment">Hello blank fragment</string>
-  <string name="colaborador">Colaborador</string>
-  <string name="buscar">BUSCAR</string>
-  <string name="escuchando_conexiones">Escuchando conexiones con lector...</string>
-  <string name="conectado_al_lector">Conectado al lector: %1$s</string>
-  <string name="conectando">Conectando...</string>
-  <string name="esperando_intento_conexion">Esperando intento de conexión...</string>
-  <string name="registrar_huella_nueva">Registrar Huella Nueva</string>
-  <string name="tomar_asistencia">Tomar Asistencia</string>
-  <string name="finger_print">Finger Print</string>
-  <string name="take_attendance">Take Attendance</string>
-  <string name="guardar_huella">Guardar Huella</string>
-  <string name="esperando_conexiones_lector">Esperando conexiones con lector...</string>
-  <string name="desconectar">Desconectar</string>
-  <string name="conectar_con_lector">Conectar con Lector</string>
+    <!--  FS28DemoActivity -->
+    <string name="mensajeBienvenida">V.1.0</string>
+    <string name="app_name">Asistencia </string>
+    <!--  DeviceListActivity -->
+    <string name="scanning">Escaneando dispositivos &#8230;</string>
+    <string name="select_device">Select a device to connect</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for devices</string>
+    <string name="In">In</string>
+    <string name="Out">Out</string>
+    <string name="btn_open">Conectar con Lector</string>
+    <string name="Save">Registrar Nuevo Colaborador</string>
+    <string name="Message"></string>
+    <string name="ImageDes"></string>
+    <string name="textView1">Please select the file format to save.</string>
+    <string name="radioBitmap">Bitmap</string>
+    <string name="radioWSQ">WSQ</string>
+    <string name="radioSample">Futronic Sample</string>
+    <string name="radioANSI">ANSI Sample</string>
+    <string name="radioISO">ISO Sample</string>
+    <string name="textView2">File name: </string>
+    <string name="buttonOK">OK</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="colaborador">Colaborador</string>
+    <string name="buscar">BUSCAR</string>
+    <string name="escuchando_conexiones">Escuchando conexiones con lector...</string>
+    <string name="conectado_al_lector">Conectado al lector: %1$s</string>
+    <string name="conectando">Conectando...</string>
+    <string name="esperando_intento_conexion">Esperando intento de conexión...</string>
+    <string name="registrar_huella_nueva">Registrar Huella Nueva</string>
+    <string name="tomar_asistencia">Tomar Asistencia</string>
+    <string name="finger_print">Finger Print</string>
+    <string name="take_attendance">Take Attendance</string>
+    <string name="guardar_huella">Guardar Huella</string>
+    <string name="esperando_conexiones_lector">Esperando conexiones con lector...</string>
+    <string name="desconectar">Desconectar</string>
+    <string name="conectar_con_lector">Conectar con Lector</string>
+    <string name="codigo_colaborador">Codigo Colaborador</string>
+    <string name="imagen_huella">Imagen huella</string>
+    <string name="asistencias_tomadas">Asistencias Tomadas</string>
 
 
 </resources>

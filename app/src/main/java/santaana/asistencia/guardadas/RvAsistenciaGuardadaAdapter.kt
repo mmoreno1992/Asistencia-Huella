@@ -31,11 +31,12 @@ class RvAsistenciaGuardadaAdapter :
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val codigoEmpleado = itemView.findViewById<TextView>(R.id.codigoEmpleadoItem)
         val fecha = itemView.findViewById<TextView>(R.id.fechaAsistenciaItem)
-
+        val tipoAsistencia = itemView.findViewById<TextView>(R.id.tvEntradaSalida)
         fun bind(item: AsistenciaEmpleado?) {
             item?.let {
                 codigoEmpleado.text = it.codigoEmpleado.toString()
                 fecha.text = formatDateTime(it.fecha)
+                tipoAsistencia.text = it.entradaSalida.toString()
             }
         }
     }

@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="santaana.asistencia">
+    package="santaana.asistencia">
 
-  <application
-    android:name=".App"
-    android:allowBackup="false"
-    android:icon="@mipmap/ic_launcher"
-    android:label="@string/app_name"
-    android:requestLegacyExternalStorage="true"
-    android:roundIcon="@mipmap/ic_launcher_round"
-    android:theme="@style/Theme.Asistencia">
-    <activity
-      android:name=".MenuActivity"
-      android:screenOrientation="portrait">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity>
-    <activity android:name=".guardadas.AsistenciaGuardadaActivity" />
-    <activity
-      android:name=".registrar.RegistrarHuellaActivity"
-      android:screenOrientation="portrait" />
-    <activity
-      android:name=".FS28DemoActivity"
-      android:configChanges="orientation|keyboardHidden"
-      android:label="@string/app_name"
-      android:screenOrientation="portrait"></activity>
-    <activity
-      android:name=".DeviceListActivity"
-      android:configChanges="orientation|keyboardHidden"
-      android:label="@string/select_device"
-      android:screenOrientation="portrait"
-      android:theme="@android:style/Theme.Dialog" />
-    <activity
-      android:name=".SelectFileFormatActivity"
-      android:screenOrientation="portrait"
-      android:theme="@style/Theme.MaterialComponents.DayNight.Dialog" />
-  </application>
+    <application
+        android:name=".App"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:theme="@style/Theme.Asistencia">
+        <activity android:name=".asistencia.TomarAsistenciaActivity"></activity>
+        <activity
+            android:name=".MenuActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-  <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-  <uses-permission android:name="android.permission.BLUETOOTH" />
-
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".guardadas.AsistenciaGuardadaActivity" />
+        <activity
+            android:name=".registrar.RegistrarHuellaActivity"
+            android:label="Huella Nueva"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FS28DemoActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DeviceListActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/select_device"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Dialog" />
+        <activity
+            android:name=".SelectFileFormatActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MaterialComponents.DayNight.Dialog" />
+    </application>
 
 </manifest>

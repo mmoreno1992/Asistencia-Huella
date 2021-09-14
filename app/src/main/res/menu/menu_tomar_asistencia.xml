@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_conecta_lector"
+        android:title="@string/conectar_con_lector"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_asistencia_tomada"
+        android:title="@string/asistencias_tomadas"
+        app:showAsAction="never" />
+</menu>
