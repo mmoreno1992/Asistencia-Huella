@@ -6,6 +6,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -13,10 +14,13 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import santaana.asistencia.R
 import santaana.asistencia.guardadas.AsistenciaRepository
+import santaana.asistencia.networking.AsistenciaApi
+import santaana.asistencia.util.toAsistenciaDto
 
 class SincronizationService : Service(), KoinComponent {
 
     val repository: AsistenciaRepository by inject()
+    val asistenciaApi: AsistenciaApi by inject()
 
     var isRunning = false
 
@@ -43,10 +47,32 @@ class SincronizationService : Service(), KoinComponent {
     }
 
     private suspend fun sincronizaAsistencia() {
-        val list = repository.getRegistrosNoEnviados()
+        var list = repository.getRegistrosNoEnviados()
         list.forEach {
 
+            val dto = it.toAsistenciaDto()
+            try {
+                val response = asistenciaApi.enviaAsistencia(dto)
+                if (response.isSuccessful) {
+                    repository.marcaRegistroComoEnviado(it.id)
+                }
+            } catch (ex: Exception) {
+                Toast.makeText(
+                    this,
+                    "Error tratando de sincronizar -> ${ex.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
+        list = repository.getRegistrosNoEnviados()
+        if (list.isNotEmpty()) {
+            Toast.makeText(
+                this,
+                "NO SE SINCRONIZARON TODOS LOS REGISTROS, INTENTE DE NUEVO.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        stopSelf()
     }
 
     private fun showNotification() {

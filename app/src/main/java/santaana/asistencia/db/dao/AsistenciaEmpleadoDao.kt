@@ -21,4 +21,5 @@ abstract class AsistenciaEmpleadoDao {
     @Query("Update AsistenciaEmpleado Set enviado = 'S' Where id = :idRegistro")
     abstract suspend fun marcaRegistroComoEnviado(idRegistro: Long)
 
+
 }

@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import santaana.asistencia.db.TipoAsistencia
+import java.util.*
 
 @Entity
 class AsistenciaEmpleado(
@@ -13,5 +14,6 @@ class AsistenciaEmpleado(
     val codigoEmpleado: Int,
     val fecha: LocalDateTime,
     val entradaSalida: TipoAsistencia,
-    var enviado: String = "N"
+    var enviado: String = "N",
+    val uuid: String = UUID.randomUUID().toString()
 )

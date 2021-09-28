@@ -124,36 +124,41 @@ class TomarAsistenciaActivity : AppCompatActivity() {
                     .dpi(500.0)
             )
         )
-        getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.listFiles { _, name ->
-            name.contains(
-                codigo.toString()
-            )
-        }?.forEach {
-
-            if (!huellaEncontrada) {
-                val probe = FingerprintTemplate(
-                    FingerprintImage(
-                        it.readBytes(),
-                        FingerprintImageOptions()
-                            .dpi(500.0)
-                    )
+        run loop@{
+            getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.listFiles { _, name ->
+                name.contains(
+                    codigo.toString()
                 )
+            }?.forEach {
 
-                val score = FingerprintMatcher(probe)
-                    .match(candidate)
-                if (score >= 40) {
-                    repository.registraAsistenciaNueva(codigo, getTipoAsistencia())
-                    huellaEncontrada = true
-                }
-                CoroutineScope(Dispatchers.Main).launch {
+                if (!huellaEncontrada) {
+                    val probe = FingerprintTemplate(
+                        FingerprintImage(
+                            it.readBytes(),
+                            FingerprintImageOptions()
+                                .dpi(500.0)
+                        )
+                    )
+
+                    val score = FingerprintMatcher(probe)
+                        .match(candidate)
                     if (score >= 40) {
-                        mMessage?.text = "Se registró la asistencia del colaborador $codigo"
+                        repository.registraAsistenciaNueva(codigo, getTipoAsistencia())
+                        huellaEncontrada = true
                     }
+                    CoroutineScope(Dispatchers.Main).launch {
+                        if (score >= 40) {
+                            mMessage?.text = "Se registró la asistencia del colaborador $codigo"
+                            mMessage?.postDelayed({
+                                mFingerImage?.setImageResource(R.drawable.ic_picture)
+                            }, 1000)
+                        }
+                    }
+                } else {
+                    return@loop
                 }
-            } else {
-                return@forEach
-            }
 
+            }
         }
         CoroutineScope(Dispatchers.Main).launch {
             binding.botonTomarAsistencia.isEnabled = true
@@ -185,40 +190,42 @@ class TomarAsistenciaActivity : AppCompatActivity() {
                     .dpi(500.0)
             )
         )
-        getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.listFiles()?.forEach {
-            if (!huellaEncontrada) {
+        run loop@{
+            getExternalFilesDir(Environment.DIRECTORY_PICTURES)?.listFiles()?.forEach {
+                if (!huellaEncontrada) {
 
-                CoroutineScope(Dispatchers.Main).launch {
-                    mMessage?.text = "Revisando el archivo ${it.name}"
+                    CoroutineScope(Dispatchers.Main).launch {
+                        mMessage?.text = "Revisando el archivo ${it.name}"
+                    }
+                    val probe = FingerprintTemplate(
+                        FingerprintImage(
+                            it.readBytes(),
+                            FingerprintImageOptions()
+                                .dpi(500.0)
+                        )
+                    )
+
+                    val score = FingerprintMatcher(probe)
+                        .match(candidate)
+                    if (score >= 40) {
+                        huellaEncontrada = true
+                        repository.registraAsistenciaNueva(
+                            it.name.split("_")[0].toInt(),
+                            getTipoAsistencia()
+                        )
+                        CoroutineScope(Dispatchers.Main).launch {
+                            mMessage?.text =
+                                "Se registró asistencia para el colaborador ${it.name.split("_")[0]} "//Archivo ${it.name} COINCIDE con la huella de it.name.split(\"_\")[0]"
+                        }
+                    }
+                } else {
+                    return@loop
                 }
-                val probe = FingerprintTemplate(
-                    FingerprintImage(
-                        it.readBytes(),
-                        FingerprintImageOptions()
-                            .dpi(500.0)
-                    )
-                )
-
-                val score = FingerprintMatcher(probe)
-                    .match(candidate)
-                if (score >= 40) {
-                    huellaEncontrada = true
-                    repository.registraAsistenciaNueva(
-                        it.name.split("_")[0].toInt(),
-                        getTipoAsistencia()
-                    )
+                if (!huellaEncontrada) {
                     CoroutineScope(Dispatchers.Main).launch {
                         mMessage?.text =
-                            "Se registró asistencia para el colaborador ${it.name.split("_")[0]} "//Archivo ${it.name} COINCIDE con la huella de it.name.split(\"_\")[0]"
+                            "No se encontró una huella que coincidiera, no se registró asistencia. "
                     }
-                }
-            } else {
-                return@forEach
-            }
-            if (!huellaEncontrada) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    mMessage?.text =
-                        "No se encontró una huella que coincidiera, no se registró asistencia. "
                 }
             }
         }
@@ -306,7 +313,7 @@ class TomarAsistenciaActivity : AppCompatActivity() {
             val fileFormat = ".bmp"
             val date = LocalDate.now()
             val fileName =
-                "$dir/${codigoEmpleado.text.toString()}_${date.dayOfMonth}${date.monthValue}${date.year}"
+                "$dir/${codigoEmpleado.text.toString()}_${date.dayOfMonth}${date.monthValue}${date.year}.bmp"
             saveImageByFileFormat(fileFormat, fileName)
         } else {
             // Do not have permissions, request them now

@@ -4,8 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 class AsistenciaDto(
     val empleado: Int,
-    val uuid: String,
-    @SerializedName("tipo_asistencia")
+    val fecha: String,
     val tipoAsistencia: String,
-    val fecha: String
+    val uuid: String
 )

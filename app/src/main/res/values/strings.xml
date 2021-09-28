@@ -44,6 +44,7 @@
     <string name="codigo_colaborador">Codigo Colaborador</string>
     <string name="imagen_huella">Imagen huella</string>
     <string name="asistencias_tomadas">Asistencias Tomadas</string>
+    <string name="sincronizar">Sincronizar</string>
 
 
 </resources>

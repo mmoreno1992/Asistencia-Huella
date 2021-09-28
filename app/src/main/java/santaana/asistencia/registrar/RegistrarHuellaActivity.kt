@@ -156,7 +156,7 @@ class RegistrarHuellaActivity : AppCompatActivity() {
             val fileName =
                 "$dir/${codigoEmpleado.text.toString()}_${
                     date.dayOfMonth.toString().padStart(2, '0')
-                }${date.monthValue.toString().padStart(2, '0')}${date.year}"
+                }${date.monthValue.toString().padStart(2, '0')}${date.year}.bmp"
             saveImageByFileFormat(fileFormat, fileName)
         } else {
             // Do not have permissions, request them now
