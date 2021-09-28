@@ -35,16 +35,6 @@ class MenuActivity : AppCompatActivity() {
             startActivity(Intent(this, TomarAsistenciaActivity::class.java))
         }
 
-        binding.button.setOnClickListener {
-            val fecha =
-                DateTimeFormatter.ISO_DATE_TIME.format(LocalDateTime.now())
-
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-            val fecha2 = formatter.format(LocalDateTime.now())
-            Log.i(TAG, "onCreate: $fecha")
-            Log.i(TAG, "onCreate: $fecha2")
-        }
-
         val perms = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         EasyPermissions.requestPermissions(
             this, "Permiso necesario para almacenar las imagenes con las huellas",
